@@ -274,12 +274,12 @@ class RoboMover:
         if command.commandType != CommandType.Motion:
             return
         if command.motionType == MotionType.MoveForward:
-            motor_A(0, command.speed)
-            motor_B(1, command.speed)
+            self.motor_A(0, command.speed)
+            self.motor_B(1, command.speed)
             time.sleep(command.duration)
         if command.motionType == MotionType.MoveBackward:
-            motor_A(1, command.speed)
-            motor_B(0, command.speed)
+            self.motor_A(1, command.speed)
+            self.motor_B(0, command.speed)
             time.sleep(command.duration)
 
         if command.motionType == MotionType.MoveLeft:
