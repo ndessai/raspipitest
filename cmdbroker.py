@@ -32,5 +32,5 @@ class CommandBroker:
                 messages = queue_receiver.fetch_next(timeout=3)
                 for message in messages:
                     message.complete()
-                    cmd = CommandDeserializer().DeserializeCommand(json.loads(str(message)))
+                    cmd = CommandDeserializer().Deserialize(json.loads(str(message)))
                     yield cmd
