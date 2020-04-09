@@ -12,13 +12,13 @@ while True:
     if x == 0:
         break
     if x == 1:
-        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveForward, 1, 1))
+        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveForward, 10, 1))
     elif x == 2:
-        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveBackward, 1, 1))
+        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveBackward, 10, 1))
     elif x == 3:
-        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveRight, 1, 1))
+        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveRight, 5, 1))
     elif x == 4:
-        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveLeft, 1, 1))
+        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveLeft, 5, 1))
     elif x == 5:
         broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveCenter, 1, 1))
     elif x == 6:

@@ -134,7 +134,7 @@ class RoboMover:
     def turnLeft(self, coe=1):
         global pwm2_pos
         pwm2_pos = pwm2_init + int(coe*pwm2_range*pwm2_direction)
-        pwm2_pos = ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
+        pwm2_pos = self.ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
         RGB.both_off()
         RGB.yellow()
         pwm.set_pwm(2, 0, pwm2_pos)
@@ -143,7 +143,7 @@ class RoboMover:
     def turnRight(self, coe=1):
         global pwm2_pos
         pwm2_pos = pwm2_init - int(coe*pwm2_range*pwm2_direction)
-        pwm2_pos = ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
+        pwm2_pos = self.ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
         RGB.both_off()
         RGB.yellow()
         pwm.set_pwm(2, 0, pwm2_pos)
@@ -172,9 +172,9 @@ class RoboMover:
 
     def saveConfig(self):
         RGB.pink()
-        replace_num('pwm0_init = ',pwm0_init)
-        replace_num('pwm1_init = ',pwm1_init)
-        replace_num('pwm2_init = ',pwm2_init)
+        self.replace_num('pwm0_init = ',pwm0_init)
+        self.replace_num('pwm1_init = ',pwm1_init)
+        self.replace_num('pwm2_init = ',pwm2_init)
         RGB.cyan()
 
 
@@ -226,28 +226,28 @@ class RoboMover:
     def lookleft(self, speed):
         global pwm1_pos
         pwm1_pos += speed*pwm1_direction
-        pwm1_pos = ctrl_range(pwm1_pos, pwm1_max, pwm1_min)
+        pwm1_pos = self.ctrl_range(pwm1_pos, pwm1_max, pwm1_min)
         pwm.set_pwm(1, 0, pwm1_pos)
 
 
     def lookright(self, speed):
         global pwm1_pos
         pwm1_pos -= speed*pwm1_direction
-        pwm1_pos = ctrl_range(pwm1_pos, pwm1_max, pwm1_min)
+        pwm1_pos = self.ctrl_range(pwm1_pos, pwm1_max, pwm1_min)
         pwm.set_pwm(1, 0, pwm1_pos)
 
 
     def up(self, speed):
         global pwm0_pos
         pwm0_pos -= speed*pwm0_direction
-        pwm0_pos = ctrl_range(pwm0_pos, pwm0_max, pwm0_min)
+        pwm0_pos = self.ctrl_range(pwm0_pos, pwm0_max, pwm0_min)
         pwm.set_pwm(0, 0, pwm0_pos)
 
 
     def down(self, speed):
         global pwm0_pos
         pwm0_pos += speed*pwm0_direction
-        pwm0_pos = ctrl_range(pwm0_pos, pwm0_max, pwm0_min)
+        pwm0_pos = self.ctrl_range(pwm0_pos, pwm0_max, pwm0_min)
         pwm.set_pwm(0, 0, pwm0_pos)
 
     def ahead(self):
