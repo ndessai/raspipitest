@@ -1,7 +1,7 @@
+from __future__ import division
 from cmdmoves import CommandType, MotionType, MotionCommand, StartCommand, StopCommand 
 import time
 import RPi.GPIO as GPIO
-from __future__ import division
 import sys
 import Adafruit_PCA9685
 import ultra
@@ -120,7 +120,7 @@ class RoboMover:
             pwm_B.ChangeDutyCycle(speed)
 
     def replace_num(initial,new_num):   #Call this function to replace data in '.txt' file
-        newline=""ß
+        newline=""
         str_num=str(new_num)
         with open("%s/servo.py"%sys.path[0],"r") as f:
             for line in f.readlines():

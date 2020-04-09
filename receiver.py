@@ -1,7 +1,11 @@
-import commands
+import cmdbroker
 import json
+from robomover import RoboMover
 
-
-broker = commands.CommandBroker()
+mover = RoboMover()
+broker = cmdbroker.CommandBroker()
 for command in broker.Receive():
     print(command.commandType)
+    mover.Move(command)
+
+mover.Done()
