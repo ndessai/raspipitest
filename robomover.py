@@ -55,7 +55,7 @@ pwm2_pos  = pwm2_init
 class RoboMover:
 
     def __init__(self):
-        setup()
+        self.setup()
         RGB.setup()
         RGB.cyan()
         try:
@@ -66,7 +66,7 @@ class RoboMover:
         pwm.set_pwm(1, 0, pwm1_init)
         pwm.set_pwm(2, 0, pwm2_init)
 
-    def motorStop():#Motor stops
+    def motorStop(self):#Motor stops
         GPIO.output(Motor_A_Pin1, GPIO.LOW)
         GPIO.output(Motor_A_Pin2, GPIO.LOW)
         GPIO.output(Motor_B_Pin1, GPIO.LOW)
@@ -75,7 +75,7 @@ class RoboMover:
         GPIO.output(Motor_B_EN, GPIO.LOW)
 
 
-    def setup():#Motor initialization
+    def setup(self):#Motor initialization
         global pwm_A, pwm_B
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
@@ -86,7 +86,7 @@ class RoboMover:
         GPIO.setup(Motor_B_Pin1, GPIO.OUT)
         GPIO.setup(Motor_B_Pin2, GPIO.OUT)
 
-        motorStop()
+        self.motorStop()
         try:
             pwm_A = GPIO.PWM(Motor_A_EN, 1000)
             pwm_B = GPIO.PWM(Motor_B_EN, 1000)
@@ -94,7 +94,7 @@ class RoboMover:
             pass
 
 
-    def motor_A(direction, speed):#Motor 2 positive and negative rotation
+    def motor_A(self, direction, speed):#Motor 2 positive and negative rotation
         if direction == Dir_backward:
             GPIO.output(Motor_B_Pin1, GPIO.HIGH)
             GPIO.output(Motor_B_Pin2, GPIO.LOW)
@@ -107,7 +107,7 @@ class RoboMover:
             pwm_A.ChangeDutyCycle(speed)
 
 
-    def motor_B(direction, speed):#Motor 1 positive and negative rotation
+    def motor_B(self, direction, speed):#Motor 1 positive and negative rotation
         if direction == Dir_forward:#
             GPIO.output(Motor_A_Pin1, GPIO.HIGH)
             GPIO.output(Motor_A_Pin2, GPIO.LOW)
@@ -119,7 +119,7 @@ class RoboMover:
             pwm_B.start(0)
             pwm_B.ChangeDutyCycle(speed)
 
-    def replace_num(initial,new_num):   #Call this function to replace data in '.txt' file
+    def replace_num(self, initial,new_num):   #Call this function to replace data in '.txt' file
         newline=""
         str_num=str(new_num)
         with open("%s/servo.py"%sys.path[0],"r") as f:
@@ -131,7 +131,7 @@ class RoboMover:
             f.writelines(newline)	#Call this function to replace data in '.txt' file
 
 
-    def turnLeft(coe=1):
+    def turnLeft(self, coe=1):
         global pwm2_pos
         pwm2_pos = pwm2_init + int(coe*pwm2_range*pwm2_direction)
         pwm2_pos = ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
@@ -140,7 +140,7 @@ class RoboMover:
         pwm.set_pwm(2, 0, pwm2_pos)
 
 
-    def turnRight(coe=1):
+    def turnRight(self, coe=1):
         global pwm2_pos
         pwm2_pos = pwm2_init - int(coe*pwm2_range*pwm2_direction)
         pwm2_pos = ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
@@ -149,14 +149,14 @@ class RoboMover:
         pwm.set_pwm(2, 0, pwm2_pos)
 
 
-    def turnMiddle():
+    def turnMiddle(self):
         global pwm2_pos
         pwm2_pos = pwm2_init
         RGB.both_on()
         pwm.set_pwm(2, 0, pwm2_pos)
 
 
-    def setPWM(num, pos):
+    def setPWM(self, num, pos):
         global pwm0_init, pwm1_init, pwm2_init, pwm0_pos, pwm1_pos, pwm2_pos
         pwm.set_pwm(num, 0, pos)
         if num == 0:
@@ -170,7 +170,7 @@ class RoboMover:
             pwm2_pos = pos
 
 
-    def saveConfig():
+    def saveConfig(self):
         RGB.pink()
         replace_num('pwm0_init = ',pwm0_init)
         replace_num('pwm1_init = ',pwm1_init)
@@ -178,7 +178,7 @@ class RoboMover:
         RGB.cyan()
 
 
-    def radar_scan():
+    def radar_scan(self):
         global pwm1_pos
         RGB.cyan()
         scan_result = 'U: '
@@ -213,7 +213,7 @@ class RoboMover:
         return scan_result
 
 
-    def ctrl_range(raw, max_genout, min_genout):
+    def ctrl_range(self, raw, max_genout, min_genout):
         if raw > max_genout:
             raw_output = max_genout
         elif raw < min_genout:
@@ -223,34 +223,34 @@ class RoboMover:
         return int(raw_output)
 
 
-    def lookleft(speed):
+    def lookleft(self, speed):
         global pwm1_pos
         pwm1_pos += speed*pwm1_direction
         pwm1_pos = ctrl_range(pwm1_pos, pwm1_max, pwm1_min)
         pwm.set_pwm(1, 0, pwm1_pos)
 
 
-    def lookright(speed):
+    def lookright(self, speed):
         global pwm1_pos
         pwm1_pos -= speed*pwm1_direction
         pwm1_pos = ctrl_range(pwm1_pos, pwm1_max, pwm1_min)
         pwm.set_pwm(1, 0, pwm1_pos)
 
 
-    def up(speed):
+    def up(self, speed):
         global pwm0_pos
         pwm0_pos -= speed*pwm0_direction
         pwm0_pos = ctrl_range(pwm0_pos, pwm0_max, pwm0_min)
         pwm.set_pwm(0, 0, pwm0_pos)
 
 
-    def down(speed):
+    def down(self, speed):
         global pwm0_pos
         pwm0_pos += speed*pwm0_direction
         pwm0_pos = ctrl_range(pwm0_pos, pwm0_max, pwm0_min)
         pwm.set_pwm(0, 0, pwm0_pos)
 
-    def ahead():
+    def ahead(self):
         global pwm1_pos, pwm0_pos
         pwm.set_pwm(1, 0, pwm1_init)
         pwm.set_pwm(0, 0, pwm0_init)
@@ -258,12 +258,12 @@ class RoboMover:
         pwm0_pos = pwm0_init
 
 
-    def get_direction():
+    def get_direction(self):
         return (pwm1_pos - pwm1_init)
 
     def Done(self):
         global pwm
-        motorStop()
+        self.motorStop()
         pwm = Adafruit_PCA9685.PCA9685()
         pwm.set_pwm_freq(50)
         pwm.set_all_pwm(0, 0)
@@ -283,25 +283,25 @@ class RoboMover:
             time.sleep(command.duration)
 
         if command.motionType == MotionType.MoveLeft:
-            turnLeft(command.speed)
+            self.turnLeft(command.speed)
         if command.motionType == MotionType.MoveRight:
-            turnRight(command.speed)
+            self.turnRight(command.speed)
         if command.motionType == MotionType.MoveCenter:
-            turnMiddle()
+            self.turnMiddle()
 
         if command.motionType == MotionType.LookRight:
-            lookright(command.speed)
+            self.lookright(command.speed)
         if command.motionType == MotionType.LookLeft:
-            lookleft(command.speed)
+            self.lookleft(command.speed)
         if command.motionType == MotionType.LookHCenter:
-            ahead()
+            self.ahead()
 
         if command.motionType == MotionType.LookUp:
-            up(command.speed)
+            self.up(command.speed)
         if command.motionType == MotionType.LookDown:
-            down(command.speed)
+            self.down(command.speed)
         if command.motionType == MotionType.LookVCenter:
-            ahead()
+            self.ahead()
         
 
 
