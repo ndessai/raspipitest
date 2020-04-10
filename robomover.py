@@ -276,10 +276,12 @@ class RoboMover:
             self.motor_A(0, command.speed)
             self.motor_B(1, command.speed)
             time.sleep(command.duration)
+            self.motorStop()
         if command.motionType == MotionType.MoveBackward:
             self.motor_A(1, command.speed)
             self.motor_B(0, command.speed)
             time.sleep(command.duration)
+            self.motorStop()
 
         if command.motionType == MotionType.MoveLeft:
             self.turnLeft(command.speed)
