@@ -12,9 +12,9 @@ while True:
     if x == 0:
         break
     if x == 1:
-        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveForward, 10, 1))
+        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveForward, 100, 2))
     elif x == 2:
-        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveBackward, 10, 1))
+        broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveBackward, 100, 2))
     elif x == 3:
         broker.Send(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveRight, 5, 1))
     elif x == 4:
