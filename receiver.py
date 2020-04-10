@@ -13,9 +13,9 @@ try:
             mover.Done()
             break
         if x == 1:
-            mover.Move(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveForward, 100, 1))
+            mover.Move(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveForward, 50, 1))
         elif x == 2:
-            mover.Move(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveBackward, 100, 1))
+            mover.Move(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveBackward, 50, 1))
         elif x == 3:
             mover.Move(cmdmoves.MotionCommand(cmdmoves.MotionType.MoveRight, 5, 1))
         elif x == 4:
