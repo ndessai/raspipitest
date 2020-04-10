@@ -4,7 +4,7 @@ import cmdmoves
 from robomover import RoboMover
 
 mover = RoboMover()
-
+'''
 try:
     while True:
         print("Enter Command")
@@ -53,4 +53,3 @@ except KeyboardInterrupt:
     mover.Done()
 
 
-'''

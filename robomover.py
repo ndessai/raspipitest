@@ -133,9 +133,7 @@ class RoboMover:
     def turnLeft(self, coe=1):
         global pwm2_pos
         pwm2_pos = pwm2_init + int(coe*pwm2_range*pwm2_direction)
-        print(pwm2_pos)
         pwm2_pos = self.ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
-        print(pwm2_pos)
         RGB.both_off()
         RGB.yellow()
         print(pwm2_pos)
@@ -145,9 +143,7 @@ class RoboMover:
     def turnRight(self, coe=1):
         global pwm2_pos
         pwm2_pos = pwm2_init - int(coe*pwm2_range*pwm2_direction)
-        print(pwm2_pos)
         pwm2_pos = self.ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
-        print(pwm2_pos)
         RGB.both_off()
         RGB.yellow()
         pwm.set_pwm(2, 0, pwm2_pos)
