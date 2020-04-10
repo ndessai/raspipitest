@@ -2,8 +2,63 @@ import cmdbroker
 import json
 import cmdmoves
 from robomover import RoboMover
+import threading
+import socket
+import time
+import picamera
+
+stoprecording = False
+
+def CameraRecording(name):
+    camera = picamera.PiCamera()
+    camera.resolution = (640, 480)
+    camera.framerate = 24
+
+    server_socket = socket.socket()
+    server_socket.bind(('0.0.0.0', 8000))
+    server_socket.listen(0)
+
+    # Accept a single connection and make a file-like object out of it
+    connection = server_socket.accept()[0].makefile('wb')
+    try:
+        while not stoprecording:
+            camera.start_recording(connection, format='h264')
+            camera.wait_recording(60)
+            
+        camera.stop_recording()
+    finally:
+        connection.close()
+        server_socket.close()
+
+
+# start camera thread
+cameraThread = threading.Thread(target=CameraRecording, args=(1,))
+cameraThread.start()
+
+def WaitCameraThread():
+    stoprecording = True
+    cameraThread.join()
 
 mover = RoboMover()
+
+try:
+
+    broker = cmdbroker.CommandBroker()
+    print("Waiting for commands")
+
+    for command in broker.Receive():
+        print(command.commandType)
+        mover.Move(command)
+
+    mover.Done()
+    WaitCameraThread()
+
+except KeyboardInterrupt:
+    mover.Done()
+    WaitCameraThread()
+    
+
+
 '''
 try:
     while True:
@@ -38,18 +93,7 @@ except KeyboardInterrupt:
     mover.Done()
 
 '''
-try:
 
-    broker = cmdbroker.CommandBroker()
-    print("Waiting for commands")
 
-    for command in broker.Receive():
-        print(command.commandType)
-        mover.Move(command)
-
-    mover.Done()
-
-except KeyboardInterrupt:
-    mover.Done()
 
 
