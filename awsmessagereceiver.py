@@ -19,7 +19,4 @@ response = sqs.receive_message(
 )
 
 message = response['Messages'][0]
-receipt_handle = message['ReceiptHandle']
-
-
 print('Received and deleted message: %s' % message)
