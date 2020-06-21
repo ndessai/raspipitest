@@ -9,10 +9,10 @@ import uuid
 
 
 CHUNK_SIZE = 8192
-MIN_VOLUME = 5000
+MIN_VOLUME = 500
 # if the recording thread can't consume fast enough, the listener will start discarding
-BUF_MAX_SIZE = CHUNK_SIZE * 10
-MAX_SILENCES = 8
+BUF_MAX_SIZE = CHUNK_SIZE * 20
+MAX_SILENCES = 4
 CHANNELS = 1
 RATE = 44100
 FORMAT = pyaudio.paInt16
