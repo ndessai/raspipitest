@@ -37,7 +37,7 @@ def detect_intent_audio(session_id, input_audio_stream):
     sample_rate_hertz = RATE
 
     session = session_client.session_path(project_id, session_id)
-    print('Session path: {}\n'.format(session))
+    #print('Session path: {}\n'.format(session))
 
     #with open(audio_file_path, 'rb') as audio_file:
     #    input_audio = audio_file.read()
@@ -92,7 +92,6 @@ def record(stopped, q):
         chunk = q.get()
         vol = max(chunk)
         if vol >= MIN_VOLUME:
-            print(vol)
             frames.append(chunk)
             voice_detected = True
             silences = MAX_SILENCES
