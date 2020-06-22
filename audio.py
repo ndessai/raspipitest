@@ -151,7 +151,7 @@ def listen(stopped, q):
         if stopped.wait(timeout=0):
             break
         try:
-            q.put(array('h', stream.read(CHUNK_SIZE)))
+            q.put(array('h', stream.read(CHUNK_SIZE, exception_on_overflow=False)))
         except Full:
             pass  # discard
 
