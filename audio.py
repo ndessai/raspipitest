@@ -6,6 +6,8 @@ import wave, os, io
 import pyaudio
 import dialogflow_v2 as dialogflow
 import uuid
+import json
+from robomover import RoboMover
 
 
 CHUNK_SIZE = 8192
@@ -53,13 +55,30 @@ def detect_intent_audio(session_id, input_audio_stream):
     input_audio_stream.close()
 
     print('=' * 20)
-    print('Query text: {}'.format(response.query_result.query_text))
-    print('Detected intent: {} (confidence: {})\n'.format(
-        response.query_result.intent.display_name,
-        response.query_result.intent_detection_confidence))
-    print('Fulfillment text: {}\n'.format(
+    #print('Query text: {}'.format(response.query_result.query_text))
+    #print('Detected intent: {} (confidence: {})\n'.format(
+    #    response.query_result.intent.display_name,
+    #    response.query_result.intent_detection_confidence))
+    print('response: {}\n'.format(
         response.query_result.fulfillment_text))
+    
+    command = dict()
+    try:
+        command = json.loads(response.query_result.fulfillment_text)
+        print(command)
+        
+    except Full:
+        print("invalid command" + response.query_result.fulfillment_text)
+        pass  # discard
 # [END dialogflow_detect_intent_audio]
+
+    if "action" in command:
+        mover = RoboMover()
+        speed = "slow"
+        if "speed" in command:
+            speed = command["speed"]
+        mover.Move(command["action"], command["direction"], speed)
+
 
 def main():
     stopped = threading.Event()
@@ -90,7 +109,8 @@ def record(stopped, q):
         if stopped.wait(timeout=0):
             break
         chunk = q.get()
-        vol = max(chunk)
+        #vol = max(chunk)
+        print(vol)
         if vol >= MIN_VOLUME:
             frames.append(chunk)
             voice_detected = True

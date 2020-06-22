@@ -270,37 +270,46 @@ class RoboMover:
         GPIO.cleanup()             # Release resource
 
 
-    def Move(self, command):
-        if command.commandType != CommandType.Motion:
-            return
-        if command.motionType == MotionType.MoveForward:
-            self.motor_A(0, command.speed)
-            self.motor_B(1, command.speed)
-            time.sleep(command.duration)
+    #command:
+    #{"action":"move/look/turn/stop/continue", 
+    #   "direction":"forward/backward/up/down/right/left/center", 
+    #   "speed":"slow/fast"}
+    def Move(self, action, direction, speed="slow"):
+        highspeed = 110
+        lowspeed = 90
+        highduration = 2
+        turnspeed = .2
+        if action == "move" and direction == "forward":
             self.motorStop()
-        if command.motionType == MotionType.MoveBackward:
-            self.motor_A(1, command.speed)
-            self.motor_B(0, command.speed)
-            time.sleep(command.duration)
+            speed = lowspeed if speed == "slow" else highspeed 
+            self.motor_A(0, speed)
+            self.motor_B(1, speed)
+            time.sleep(highduration)
+            self.motorStop()
+        
+        if action == "move" and direction == "backward":
+            self.motorStop()
+            speed = lowspeed if speed == "slow" else highspeed 
+            self.motor_A(1, speed)
+            self.motor_B(0, speed)
+            time.sleep(highduration)
             self.motorStop()
 
-        if command.motionType == MotionType.MoveLeft:
-            self.turnLeft(command.speed)
-        if command.motionType == MotionType.MoveRight:
-            self.turnRight(command.speed)
-        if command.motionType == MotionType.MoveCenter:
+        if action == "turn" and direction == "right":
+            self.turnRight(turnspeed)
+        if action == "turn" and direction == "left":
+            self.turnLeft(turnspeed)
+        if action == "turn" and direction == "center":
             self.turnMiddle()
 
-        if command.motionType == MotionType.LookRight:
-            self.lookright(command.speed)
-        if command.motionType == MotionType.LookLeft:
-            self.lookleft(command.speed)
-        if command.motionType == MotionType.LookHCenter:
+        if action == "look" and direction == "right":
+            self.lookright(turnspeed)
+        if action == "look" and direction == "left":
+            self.lookleft(turnspeed)
+        if action == "look" and direction == "center":
             self.ahead()
-
-        if command.motionType == MotionType.LookUp:
-            self.up(command.speed)
-        if command.motionType == MotionType.LookDown:
-            self.down(command.speed)
-        if command.motionType == MotionType.LookVCenter:
-            self.ahead()
+        
+        if action == "look" and direction == "up":
+            self.up(turnspeed)
+        if action == "look" and direction == "down":
+            self.down(turnspeed)
