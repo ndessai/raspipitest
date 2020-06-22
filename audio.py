@@ -11,7 +11,7 @@ from robomover import RoboMover
 
 
 CHUNK_SIZE = 8192
-MIN_VOLUME = 500
+MIN_VOLUME = 100
 # if the recording thread can't consume fast enough, the listener will start discarding
 BUF_MAX_SIZE = CHUNK_SIZE * 20
 MAX_SILENCES = 4
@@ -21,7 +21,7 @@ FORMAT = pyaudio.paInt16
 
 
 WAVE_OUTPUT_FILENAME = "file"
-
+mover = RoboMover()
 
 # [START dialogflow_detect_intent_audio]
 def detect_intent_audio(session_id, input_audio_stream):
@@ -67,13 +67,13 @@ def detect_intent_audio(session_id, input_audio_stream):
         command = json.loads(response.query_result.fulfillment_text)
         print(command)
         
-    except Full:
+    except:
         print("invalid command" + response.query_result.fulfillment_text)
         pass  # discard
 # [END dialogflow_detect_intent_audio]
 
     if "action" in command:
-        mover = RoboMover()
+        
         speed = "slow"
         if "speed" in command:
             speed = command["speed"]
@@ -98,6 +98,7 @@ def main():
 
     listen_t.join()
     record_t.join()
+    mover.Done()
 
 
 def record(stopped, q):
@@ -109,7 +110,7 @@ def record(stopped, q):
         if stopped.wait(timeout=0):
             break
         chunk = q.get()
-        #vol = max(chunk)
+        vol = max(chunk)
         print(vol)
         if vol >= MIN_VOLUME:
             frames.append(chunk)

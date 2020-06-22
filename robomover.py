@@ -34,13 +34,11 @@ pwm = Adafruit_PCA9685.PCA9685()
 pwm.set_pwm_freq(50)
 
 pwm0_init = 300
-pwm0_range = 100
 pwm0_max  = 500
 pwm0_min  = 100
 pwm0_pos  = pwm0_init
 
-pwm1_init = 300
-pwm1_range = 150
+pwm1_init = 200
 pwm1_max  = 450
 pwm1_min  = 150
 pwm1_pos  = pwm1_init
@@ -132,22 +130,21 @@ class RoboMover:
 
     def turnLeft(self, coe=1):
         global pwm2_pos
-        pwm2_pos = pwm2_init + int(coe*pwm2_range*pwm2_direction)
+        pwm2_pos = pwm2_pos + int(coe*pwm2_range*pwm2_direction)
         pwm2_pos = self.ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
         RGB.both_off()
         RGB.yellow()
-        print(pwm2_pos)
         pwm.set_pwm(2, 0, pwm2_pos)
 
 
     def turnRight(self, coe=1):
         global pwm2_pos
-        pwm2_pos = pwm2_init - int(coe*pwm2_range*pwm2_direction)
+        pwm2_pos = pwm2_pos - int(coe*pwm2_range*pwm2_direction)
         pwm2_pos = self.ctrl_range(pwm2_pos, pwm2_max, pwm2_min)
         RGB.both_off()
         RGB.yellow()
         pwm.set_pwm(2, 0, pwm2_pos)
-
+      
 
     def turnMiddle(self):
         global pwm2_pos
@@ -242,7 +239,7 @@ class RoboMover:
         pwm0_pos -= speed*pwm0_direction
         pwm0_pos = self.ctrl_range(pwm0_pos, pwm0_max, pwm0_min)
         pwm.set_pwm(0, 0, pwm0_pos)
-
+     
 
     def down(self, speed):
         global pwm0_pos
@@ -275,12 +272,12 @@ class RoboMover:
     #   "direction":"forward/backward/up/down/right/left/center", 
     #   "speed":"slow/fast"}
     def Move(self, action, direction, speed="slow"):
-        highspeed = 110
+        highspeed = 100
         lowspeed = 90
         highduration = 2
-        turnspeed = .2
+        turnspeed = 5
+        moveturnspeed = .1
         if action == "move" and direction == "forward":
-            self.motorStop()
             speed = lowspeed if speed == "slow" else highspeed 
             self.motor_A(0, speed)
             self.motor_B(1, speed)
@@ -288,7 +285,6 @@ class RoboMover:
             self.motorStop()
         
         if action == "move" and direction == "backward":
-            self.motorStop()
             speed = lowspeed if speed == "slow" else highspeed 
             self.motor_A(1, speed)
             self.motor_B(0, speed)
@@ -296,9 +292,9 @@ class RoboMover:
             self.motorStop()
 
         if action == "turn" and direction == "right":
-            self.turnRight(turnspeed)
+            self.turnRight(moveturnspeed)
         if action == "turn" and direction == "left":
-            self.turnLeft(turnspeed)
+            self.turnLeft(moveturnspeed)
         if action == "turn" and direction == "center":
             self.turnMiddle()
 
@@ -313,3 +309,13 @@ class RoboMover:
             self.up(turnspeed)
         if action == "look" and direction == "down":
             self.down(turnspeed)
+
+if __name__ == '__main__':
+    mover = RoboMover()
+    mover.Move("turn", "left")
+    mover.Move("turn", "left")
+    mover.Move("turn", "left")
+    mover.Move("turn", "left")
+    mover.Move("turn", "left")
+    #mover.Move("move", "forward", "slow")
+    mover.Done()
