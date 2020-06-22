@@ -22,6 +22,8 @@ FORMAT = pyaudio.paInt16
 
 WAVE_OUTPUT_FILENAME = "file"
 mover = RoboMover()
+prevAction = "stop"
+prevDirection = "center"
 
 # [START dialogflow_detect_intent_audio]
 def detect_intent_audio(session_id, input_audio_stream):
@@ -73,11 +75,17 @@ def detect_intent_audio(session_id, input_audio_stream):
 # [END dialogflow_detect_intent_audio]
 
     if "action" in command:
-        
         speed = "slow"
-        if "speed" in command:
-            speed = command["speed"]
-        mover.Move(command["action"], command["direction"], speed)
+        curAction = command["action"]
+        if curAction == "stop":
+            prevAction = "stop"
+        elif curAction == "continue" and prevAction != "stop":
+            mover.Move(prevAction, prevDirection, speed)
+        else:
+            if "speed" in command:
+                speed = command["speed"]
+            prevDirection = command["direction"]
+            mover.Move(command["action"], command["direction"], speed)
 
 
 def main():
